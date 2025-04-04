@@ -1,0 +1,12 @@
+# WebScraping
+selenium
+
+# Manejo de datos
+pandas
+
+# Google Cloud SDK para autenticación y BigQuery
+google-cloud-bigquery
+google-auth
+google-auth-oauthlib
+google-auth-httplib2
+pandas-gbq
