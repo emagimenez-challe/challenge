@@ -12,7 +12,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# === Cargar credenciales desde variable de entorno ===
+# === Carga las credenciales desde la variable de entorno ===
 credentials_json = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS_JSON")
 
 if not credentials_json:
@@ -21,7 +21,7 @@ if not credentials_json:
 credentials_dict = json.loads(base64.b64decode(credentials_json))
 credentials = service_account.Credentials.from_service_account_info(credentials_dict)
 
-# === Configurar Selenium para entornos tipo Docker / Cloud Run ===
+# === Configura Selenium para entornos tipo Docker / Cloud Run ===
 options = webdriver.ChromeOptions()
 options.add_argument('--headless')
 options.add_argument('--no-sandbox')
@@ -71,14 +71,14 @@ for article in articles:
 
 driver.quit()
 
-# === Convertir a DataFrame y agregar columnas ===
+# === Convierte a DataFrame y agrega columnas ===
 df = pd.DataFrame(data)
 if not df.empty:
     df["title_word_count"] = df["title"].apply(lambda x: len(x.split()))
     df["title_char_count"] = df["title"].apply(len)
     df["capital_words"] = df["title"].apply(lambda x: [word for word in x.split() if re.match(r"^[A-Z][a-z]+$", word)])
 
-    # === Subir a BigQuery ===
+    # === Sube a BigQuery ===
     project_id = os.environ.get("PROJECT_ID", "default-project-id")
     dataset_id = os.environ.get("DATASET_ID", "default_dataset")
     table_id = os.environ.get("TABLE_ID", "default_table")
@@ -87,4 +87,4 @@ if not df.empty:
     df.to_gbq(full_table_id, project_id=project_id, if_exists="replace", credentials=credentials)
     print("Datos subidos")
 else:
-    print("No se encontraron datos")
+    print("Sin datos")
