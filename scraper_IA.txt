@@ -1,0 +1,57 @@
+Este script implementa un scraper web asistido por inteligencia artificial que extrae dinámicamente datos estructurados del sitio web Yogonet International.
+
+El scraper identifica los siguientes elementos:
+- Título
+- Volanta (Kicker)
+- Enlace
+- Imagen
+
+Funcionamiento
+--------------
+
+1. Elementos Candidatos
+   El scraper utiliza Selenium para encontrar posibles titulares (h2.titulo.fuente_roboto_slab). Cada uno es considerado como un título potencial.
+
+2. Validación AI del Título
+   Cada texto es procesado con spaCy, aplicando dos reglas:
+   - Debe contener al menos 4 palabras
+   - Debe tener al menos una entidad nombrada del tipo ORG, GPE, EVENT o WORK_OF_ART
+
+   Esto filtra textos irrelevantes y se enfoca en titulares periodísticos reales.
+
+3. Extracción de Volanta, Enlace e Imagen
+   Una vez validado el título, se extraen elementos cercanos en el DOM:
+   - Volanta: div anterior al h2
+   - Imagen: primer <img> posterior
+   - Enlace: primer <a> dentro del h2
+
+Post-Procesamiento
+------------------
+Luego de extraer los datos, se construye un DataFrame con métricas adicionales:
+- title_word_count: cantidad de palabras del título
+- title_char_count: cantidad de caracteres del título
+- capital_words: palabras que empiezan con mayúscula
+
+-----------------------
+No se entrenó un modelo supervisado. En su lugar, se usó un enfoque de reglas con spaCy (modelo en_core_web_sm) ya preentrenado, capaz de detectar entidades nombradas.
+
+Esto permite:
+- Ejecución rápida
+- Portabilidad
+- Robustez ante cambios de estructura en el sitio
+
+Tecnologías Usadas
+------------------
+- Python 3.9
+- Selenium (Chrome Headless)
+- spaCy (en_core_web_sm)
+- pandas
+
+El script genera el archivo scraped.csv.
+
+Resumen
+-------
+Este scraper cumple con el requerimiento de Scraping Dinámico Asistido por IA:
+- Detecta los elementos clave usando NLP
+- No depende de selectores fijos
+- Se adapta a cambios estructurales en el sitio web
